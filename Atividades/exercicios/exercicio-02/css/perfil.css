@@ -1,0 +1,40 @@
+.perfil {
+    margin: 1.2rem;
+    padding: 1.2rem;
+    border: 1px solid black;
+    max-width: 30em;
+    min-width: 15em;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.perfil .perfil-imagem img {
+    max-width: 100%;
+    height: auto;
+}
+
+.perfil .perfil-imagem {
+    display: inline-block;
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.perfil .perfil-info {
+    padding: 1.2em;
+    font-size: 1.2rem;
+    text-align: justify;
+
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.perfil .perfil-info p {
+    overflow-wrap: break-word;
+}

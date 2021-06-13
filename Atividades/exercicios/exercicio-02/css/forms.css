@@ -1,0 +1,69 @@
+label {
+    font-weight: bold;
+}
+
+input, label {
+    display:block;
+    font-size: 1.2rem;
+    padding: 0.2em;
+    margin: 0.5em;
+}
+
+form {
+    max-width: 30em;
+    margin: 2em;
+    padding: 2em;
+    border: 1px solid black;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1em;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+input[type="submit"],input[type="reset"] {
+    font-weight: bold;
+}
+
+input[type="submit"]:hover,input[type="reset"]:hover {
+    background-color: #8a8a8a;
+    cursor: pointer;
+}
+
+input[type="submit"]:active {
+    background-color: #02b346;
+}
+
+input[type="reset"]:active {
+    background-color: #b31102;
+}
+
+.voltar {
+    width: 10em;
+    text-align: center;
+
+    padding: 0.2em;
+    margin: 0.5em;
+
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #dddddd;
+}
+
+.voltar a {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;  
+}
+
+.voltar:hover {
+    background-color: #8a8a8a;
+}
+
+.voltar a:active {
+    color: blue;
+}

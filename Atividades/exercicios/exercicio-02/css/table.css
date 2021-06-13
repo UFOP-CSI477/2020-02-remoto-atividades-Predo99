@@ -1,0 +1,61 @@
+.cadastrar {
+    border: 1px solid black;
+    max-width: 15em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    background-color: #dddddd;
+}
+
+.cadastrar a {
+    font-size: 1.3rem;
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+}
+
+.cadastrar a:hover {
+    font-weight: bold;
+}
+
+.cadastrar a:active {
+    color: blue;
+}
+
+.cadastrar:hover {
+    background-color: #8a8a8a;
+}
+
+table {
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+}
+
+caption {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+th {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: #dddddd;
+}
+
+tfoot {
+    text-align: center;
+    font-weight: bold;
+    background-color: #8a8a8a;
+    font-size: 1.1rem;
+}
