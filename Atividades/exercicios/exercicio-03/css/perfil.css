@@ -1,0 +1,15 @@
+img {
+    display: inline-block;
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.perfil {
+    border: 1px solid black;
+    padding: 1.2em;
+    margin: 1.2em;
+}

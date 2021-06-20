@@ -1,0 +1,12 @@
+.formulario {
+    max-width: 50em;
+    margin: 0.5em;
+}
+
+form div{
+    padding: 0.5em;
+}
+
+form label {
+    font-weight: bold;
+}
