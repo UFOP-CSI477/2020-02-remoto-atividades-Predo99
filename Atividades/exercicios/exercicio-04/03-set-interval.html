@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Jogo da memória</title>
+
+    <style>
+        body{
+            background-color: black;
+        }
+
+        #table {
+            display: grid;
+            gap: 0.5em;
+            grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
+
+            margin: 1em;
+        }
+
+        #timer {
+            background-color: #ffffff;
+            width: 100%;
+            max-height: 1em;
+            min-height: 1em;
+        }
+
+        #bar {
+            background-color: #e60c0c;
+            width: 0;
+            max-width: 100%;
+            max-height: 1em;
+            min-height: 1em;
+        }
+
+        .card {
+            position: relative;
+
+            background-color: #e60c0c;
+
+            height: 10em;
+            width: 10em;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        p {
+            font-weight: bold;
+            font-size: 3rem;
+        }
+
+        #startButton {
+            background-color: #3ae010;
+            max-width: 10em;
+            height: 2em;
+            font-weight: bold;
+            font-size: larger;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="timer">
+        <div id="bar"></div>
+    </div>
+    <div id="table">
+        <button id="startButton" onclick="start()">Começar</button>
+    </div>
+</body>
+    <script>
+
+        let id;
+        let width = 1
+
+        function startTimer() {      
+            id = setInterval(timer, 1000);
+        }
+
+        function stopTimer(){
+            clearInterval(id);
+        }
+
+        function restartTimer(){
+            stopTimer();
+            const bar = document.getElementById("bar");
+            width = 0;
+            bar.style.width = width;
+        }
+
+        function timer(){
+            const bar = document.getElementById("bar");
+            width++;
+            bar.style.width = `${width}%`;
+
+            if(width == 100){
+                alert("Tempo esgotado");
+                clear();
+            }
+        }
+
+        function start() {
+            const startButton = document.getElementById("startButton");
+            const table = document.getElementById("table");
+            table.textContent = "";
+
+            const amount = 40;
+
+            var arr = [];
+            while(arr.length < amount/2){
+                var r = Math.floor(Math.random() * 100) + 1;
+                if(arr.indexOf(r) === -1) arr.push(r);
+            }
+            
+            var numeros = arr.concat(arr);
+            numeros = numeros.sort(() => Math.random() - 0.5);
+
+            for (let index = 0; index < amount; index++) {
+                let element = document.createElement("div");
+                element.setAttribute("class", "card waiting");
+                element.setAttribute("id", "card" + numeros[index]);
+                element.style.cursor = 'pointer';
+
+                let text = document.createElement('p');
+                text.innerHTML = numeros[index];
+                text.hidden = true;
+                element.appendChild(text);
+
+                element.onclick = function() {
+                    let clickedCards = document.getElementsByClassName("card clicked");
+
+                    if(clickedCards.length == 2){
+                        if(element.className != "card clicked" && "card flipped"){
+                            setTimeout(function(){ }, 400); 
+                        }
+                    }
+                    
+                    if(element.className != "card flipped"){
+                        element.style.backgroundColor = '#220ce6';
+                        element.className = "card clicked"
+
+                        let text = element.getElementsByTagName("p")[0];
+                        text.hidden = false;
+                    }
+                };
+
+                table.appendChild(element);
+            }
+
+            startTimer();
+
+            document.onclick = function() {
+                let clickedCards = document.getElementsByClassName("card clicked");
+
+                if(clickedCards.length == 2) {
+                    let card1 = clickedCards[0];
+                    let card2 = clickedCards[1];
+
+                    let text1 = card1.getElementsByTagName("p")[0];
+                    let text2 = card2.getElementsByTagName("p")[0];
+
+                    if(text1.textContent == text2.textContent){
+                        setTimeout(function(){
+                            card1.className = "card flipped";
+                            card1.style.backgroundColor = '#25e60c';
+                            card2.style.backgroundColor = '#25e60c';
+                            card2.className = "card flipped"
+
+                            let waitingCards = document.getElementsByClassName("card waiting");
+                            if(waitingCards.length == 0){
+                                alert("Vitória");
+                                clear();
+                            }
+                        }, 200); 
+                        
+                    } else {
+                        setTimeout(function(){
+                            text1.hidden = true;
+                            text2.hidden = true;
+
+                            card1.style.backgroundColor = '#e60c0c';
+                            card1.className = "card waiting";
+                            card2.style.backgroundColor = '#e60c0c';
+                            card2.className = "card waiting"
+                        }, 200);  
+                    }
+                }
+            }
+        }
+
+        function clear(){
+            restartTimer();
+
+            const table = document.getElementById("table");
+
+            while (table.lastElementChild) {
+                table.removeChild(table.lastElementChild);
+            }
+
+            const button = document.createElement("button");
+            button.id = "startButton";
+            button.innerHTML = "Começar";
+            button.onclick = function(){start()};
+            button.setAttribute("onclick","start()");
+
+            table.appendChild(button);
+        }
+
+    </script>
+    
+</html>
