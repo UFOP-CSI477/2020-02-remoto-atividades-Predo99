@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Pix</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="./css/pix.css">
+    <script src="./scripts/pix.js"></script>
+</head>
+<body onload="carregarDados()">
+    
+    <div class="container-fluid">
+        <header class="d-flex justify-content-center">
+            <h1>Controle do PIX</h1>
+        </header>
+
+        <div class="row">
+            <form name="formulario" id="formulario">
+                <div class="form-group">
+                    <label class="form-label">Tipo de chave:</label>
+                    <div class="form-group form-check">
+                        <input type="radio" name="tipoChave" id="cpf" value="P" class="form-check-input" checked>
+                        <label for="cpf" class="form-check-label">Cpf</label>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="radio" name="tipoChave" id="cnpj" value="C" class="form-check-input">
+                        <label for="cnpj" class="form-check-label">Cnpj</label>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="radio" name="tipoChave" id="email" value="E" class="form-check-input">
+                        <label for="email" class="form-check-label">Email</label>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="radio" name="tipoChave" id="celular" value="M" class="form-check-input">
+                        <label for="celular" class="form-check-label">Número de celular</label>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="radio" name="tipoChave" id="aleatoria" value="R" class="form-check-input">
+                        <label for="aleatoria" class="form-check-label">Chave aleatória</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="valorChave" class="form-label">Valor da chave</label>
+                    <input type="text" id="valorChave" value="" class="form-control" placeholder="Digite o valor da chave">
+
+                    <div id="alertaValorChave" class="alert alert-danger" style="display: none">
+                        <span>Preencha o valor da chave corretamente!</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tipo da operação:</label>
+                    <div class="form-group form-check">
+                        <input type="radio" name="tipoOperacao" id="envio" value="E" class="form-check-input" checked>
+                        <label for="envio" class="form-check-label">Envio</label>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="radio" name="tipoOperacao" id="recebimento" value="R" class="form-check-input">
+                        <label for="recebimento" class="form-check-label">Recebimento</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="valorReais" class="form-label">Valor em reais</label>
+                    <input type="number" min="0" id="valorReais" value="" class="form-control" placeholder="Digite o valor em reais">
+
+                    <div id="alertaValorReais" class="alert alert-danger" style="display: none">
+                        <span>Preencha o valor em reais corretamente!</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="data" class="form-label">Data</label>
+                    <input type="text" id="data" value="" class="form-control" placeholder="Digite a data">
+
+                    <div id="alertaData" class="alert alert-danger" style="display: none">
+                        <span>Preencha a data corretamente!</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bancos" class="form-label">Banco envolvido na operação</label>
+                    <select class="form-select" aria-label="Bancos" id="bancos"></select>
+                </div>
+
+                <div class="form-group">
+                    <input type="button" value="Adicionar" class="btn btn-success" id="botaoCadastrar" onclick="cadastrar()">
+                    <input type="button" value="Finalizar" class="btn btn-primary" id="botaoFinalizar" onclick="finalizar()" disabled>
+                    <input type="button" value="Recomeçar" class="btn btn-danger" id="botaoRecomecar" onclick="recomecar()">
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped caption-top" id="tabelaPix">
+                        <caption>Veículos adicionados</caption>
+                
+                        <thead>
+                            <tr class="table-dark">
+                                <th>Tipo de chave</th>
+                                <th>Valor da chave</th>
+                                <th>Tipo de operação</th>
+                                <th>Valor em reais</th>
+                                <th>Data</th>
+                                <th>Banco</th>
+                            </tr>
+                        </thead>
+                
+                        <tbody>
+                            
+                        </tbody>
+                
+                        <tfoot>
+                            <tr class="table-dark">
+                                <td colspan="3">Quantidade</td>
+                                <td colspan="3" id="contador">0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2>Resumo das operações</h2>
+                <form name="resultado">
+                    <div class="form-group">
+                        <label for="totalRecebido" class="form-label">Valor total recebido</label>
+                        <input type="text" id="totalRecebido" value="" class="form-control" disabled>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="totalEnviado" class="form-label">Valor total enviado</label>
+                        <input type="text" id="totalEnviado" value="" class="form-control" disabled>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="saldoFinal" class="form-label">Saldo final</label>
+                        <input type="text" id="saldoFinal" value="" class="form-control" disabled>
+                    </div>
+                </form>
+            </div>
+        </div>
+  
+    </div>
+
+</body>
+</html>

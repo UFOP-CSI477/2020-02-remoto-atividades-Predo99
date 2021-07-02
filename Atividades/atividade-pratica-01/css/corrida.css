@@ -1,0 +1,25 @@
+table {
+    text-align: center;
+}
+
+caption {
+    text-align: center;
+    font-weight: bold;
+}
+
+h1 {
+    margin-top: 0.5em;
+}
+
+#formulario {
+    width: 50em;
+}
+
+#formulario div {
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+}
+
+label {
+    font-weight: bold;
+}

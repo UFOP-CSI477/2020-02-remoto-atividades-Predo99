@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Consumo</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="./css/consumo.css">
+    <script src="./scripts/consumo.js"></script>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <header class="d-flex justify-content-center">
+            <h1>Consumo de combustível</h1>
+        </header>
+
+        <div class="row">
+            <form name="formulario" id="formulario">
+                <div class="form-group">
+                    <label for="combustivel" class="form-label">Quantidade de combustível</label>
+                    <input type="number" min="0" id="combustivel" value="" class="form-control" placeholder="Digite a quantidade de combustível">
+
+                    <div id="alertaCombustivel" class="alert alert-danger" style="display: none">
+                        <span>Preencha a quantidade de combustível corretamente!</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quilometros" class="form-label">Quantidade de quilômetros rodados</label>
+                    <input type="number" min="0" id="quilometros" value="" class="form-control" placeholder="Digite a quantidade de quilômetros rodados">
+
+                    <div id="alertaQuilometros" class="alert alert-danger" style="display: none">
+                        <span>Preencha a quantidade de quilômetros rodados corretamente!</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="button" value="Adicionar" class="btn btn-success" id="botaoCadastrar" onclick="cadastrar()">
+                    <input type="button" value="Finalizar" class="btn btn-primary" id="botaoFinalizar" onclick="finalizar()" disabled>
+                    <input type="button" value="Recomeçar" class="btn btn-danger" id="botaoRecomecar" onclick="recomecar()">
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped caption-top" id="tabelaVeiculos">
+                        <caption>Veículos adicionados</caption>
+                
+                        <thead>
+                            <tr class="table-dark">
+                                <th>Quantidade de combustível</th>
+                                <th>Quantidade de quilômetros rodados</th>
+                                <th>Desempenho em quilômetros por litro (km/l)</th>
+                            </tr>
+                        </thead>
+                
+                        <tbody>
+                            
+                        </tbody>
+                
+                        <tfoot>
+                            <tr class="table-dark">
+                                <td colspan="2">Quantidade</td>
+                                <td id="contador">0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2>Resultado</h2>
+                <form name="resultado">
+                    <div class="form-group">
+                        <label for="quantidadeTotalCombustivel" class="form-label">Quantidade total de combustível utilizada</label>
+                        <input type="text" id="quantidadeTotalCombustivel" value="" class="form-control" disabled>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="quantidadeTotalQuilometros" class="form-label">Quantidade total de quilômetros rodados</label>
+                        <input type="text" id="quantidadeTotalQuilometros" value="" class="form-control" disabled>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="mediaCombustivel" class="form-label">Média de consumo de combustível</label>
+                        <input type="text" id="mediaCombustivel" value="" class="form-control" disabled>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="mediaQuilometros" class="form-label">Média de quilômetros rodados</label>
+                        <input type="text" id="mediaQuilometros" value="" class="form-control" disabled>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="mediaDesempenho" class="form-label">Média de desempenho em quilômetros por litro (km/l)</label>
+                        <input type="text" id="mediaDesempenho" value="" class="form-control" disabled>
+                    </div>  
+                </form>
+            </div>
+        </div>
+  
+    </div>
+    
+</body>
+</html>
