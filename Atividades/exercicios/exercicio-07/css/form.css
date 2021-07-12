@@ -1,0 +1,11 @@
+h1 {
+    padding-top: 0.5em;
+}
+
+form div{
+    padding: 0.5em;
+}
+
+form label {
+    font-weight: bold;
+}
