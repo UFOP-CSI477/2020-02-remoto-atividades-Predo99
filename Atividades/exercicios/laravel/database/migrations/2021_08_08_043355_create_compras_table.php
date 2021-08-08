@@ -20,8 +20,8 @@ class CreateComprasTable extends Migration
             $table->date('data');
             $table->timestamps();
 
-            $table->foreign('pessoa_id')->references('id')->on('pessoa');
-            $table->foreign('produto_id')->references('id')->on('produto');
+            $table->foreign('pessoa_id')->references('id')->on('pessoas');
+            $table->foreign('produto_id')->references('id')->on('produtos');
         });
     }
 
