@@ -12,7 +12,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
             expiresIn: 86400
         });
 
-        // res.cookie('x-access-token', token);
+        res.cookie('x-access-token', token);
         res.status(201).send({ auth: true, token: token, userId: id, userType: user.userType });
 
     } else {
@@ -43,10 +43,14 @@ function verifyJWT(req, res, next){
         }
     }
 
-    if (!token) return res.status(401).json({ auth: false, message: 'Usuário não autenticado.' });
+    if (!token) {
+        return res.status(401).json({ auth: false, message: 'Usuário não autenticado.'});
+    }
     
     jwt.verify(token, process.env.SECRET, function(err, decoded) {
-      if (err) return res.status(401).json({ auth: false, message: 'Falha de autenticação.' });
+        if (err) {
+            return res.status(401).json({ auth: false, message: 'Falha de autenticação.'});
+        }
       
       req.userId = decoded.id;
       next();
