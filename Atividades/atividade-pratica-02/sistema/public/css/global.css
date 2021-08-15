@@ -1,0 +1,20 @@
+caption {
+    text-align: center;
+    font-weight: bold;
+}
+
+form div{
+    padding: 0.2em;
+}
+
+.card {
+    margin-top: 0.5em;
+}
+
+li {
+    margin-bottom: 0.2em;
+}
+
+label {
+    font-weight: bold;
+}
