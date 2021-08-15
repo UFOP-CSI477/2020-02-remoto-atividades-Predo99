@@ -1,0 +1,22 @@
+div {
+    font-size: large;
+}
+
+.body {
+    margin-top: 1.2em;
+    margin-bottom: 1.2em;
+}
+
+.buttonDiv {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+label {
+    font-weight: bold;
+}
+
+li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
