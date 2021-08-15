@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(router);
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
-const uri: string = `mongodb+srv://admin:admin@bancoprojeto.yajg1.mongodb.net/projeto?retryWrites=true&w=majority`;
+const uri: string = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@bancoprojeto.yajg1.mongodb.net/projeto?retryWrites=true&w=majority`;
 const options = { useNewUrlParser: true, useUnifiedTopology: true };
 mongoose.set("useFindAndModify", false);
 
