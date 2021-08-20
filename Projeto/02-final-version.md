@@ -10,15 +10,15 @@
 ### 1. Funcionalidades implementadas
 
   As seguintes funcionalidades foram previstas e implementadas:
-    * Cadastrar e atualizar Professores
-      * Cadastrar e atualizar disciplinas
-      * CRUD de aulas
-      * CRUD de arquivos
-      * CRUD de atividades
-    * Cadastrar e atualizar Alunos
-      * Realizar matrícula em disciplinas
-      * Visualizar de aulas e arquivos
-      * Visualizar e responder atividades
+  * Cadastrar e atualizar Professores
+    * Cadastrar e atualizar disciplinas
+    * CRUD de aulas
+    * CRUD de arquivos
+    * CRUD de atividades
+  * Cadastrar e atualizar Alunos
+    * Realizar matrícula em disciplinas
+    * Visualizar de aulas e arquivos
+    * Visualizar e responder atividades
   
 ### 2. Funcionalidades previstas e não implementadas
 
@@ -36,9 +36,9 @@
   Para executar a aplicação é necessário possuir o Node.js e npm instalados. Também é possível utilizar o Yarn se preferir. Após isso é necessário rodar o comando npm install ou yarn install na raíz onde existem os arquivos package.json (frontend e backend). Após isso é necessário configurar o endereço do banco de dados (na aplicação foi utilizado o MongoDB Atlas, uma versão online do MongoDB que conta com planos gratuitos) no arquivo server.ts, assim como o usuário e senha no arquivo .env. Caso seja desejado é possível mudar as portas em que a aplicação será executada. Após isso, é necessário rodar o comando yarn dev ou npm run dev, no backend, e yarn start ou npm start no frontend.
   
   A versão dos componentes utilizadas foi a seguinte:
-    * Node.js: v14.16.0
-    * NPM: 6.14.11
-    * Yarn: 1.17.3
+  * Node.js: v14.16.0
+  * NPM: 6.14.11
+  * Yarn: 1.17.3
 
 ### 5. Referências
   * Moodle. **Moodle**, 2021. Disponível em: https://www.moodlepresencial.ufop.br. Acesso em 20 ago. 2021.
