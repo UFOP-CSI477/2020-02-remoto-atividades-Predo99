@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from "axios"
 import { useHistory } from "react-router-dom";
 import CustomNavbar from '../../components/Navbar';
@@ -6,13 +6,17 @@ import { Button, Container, Form, Row } from 'react-bootstrap';
 import BackButton from '../../components/BackButton';
 import ModalError from '../../components/ModalError';
 import ModalSuccess from '../../components/ModalSucess';
+import Loading from '../../components/Loading';
 
-function CreateStudent () {
+function EditStudent () {
 
     const baseUrl: string = "http://localhost:3000";
     const history = useHistory();
+    const token = localStorage.getItem('x-access-token');
+    const userId = localStorage.getItem('userId');
     
-    const [showModal, setShowModal] = useState(false);
+    const [showModalError, setShowModalError] = useState(false);
+    const [errorStatus, setErrorStatus] = useState(Number);
     const [error, setError] = useState('');
     const [errors, setErrors] = useState<any>([]);
 
@@ -24,9 +28,16 @@ function CreateStudent () {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const userType = "student";
 
-    async function createStudent(event: any) {
+    function modalAction(){
+        if(errorStatus === 401){
+            return history.push('/');
+        } else {
+            return setShowModalError(false);
+        }
+    }
+
+    async function updateStudent(event: any) {
         event.preventDefault();
 
         const form = event.currentTarget;
@@ -43,13 +54,12 @@ function CreateStudent () {
             data.append('name', name);
             data.append('email', email);
             data.append('password', password);
-            data.append('userType', userType);
 
             var formData = JSON.stringify(Object.fromEntries(data.entries()));
             formData = JSON.parse(formData);
 
             try {
-                const response = await axios.post(baseUrl + "/addStudent", formData);
+                const response = await axios.patch(`${baseUrl}/student/${userId}`, formData, { headers: {"x-access-token" : token} });
                 setSuccessMessage(response.data.message);
                 setShowModalSuccess(true);
             } catch(error){
@@ -57,10 +67,34 @@ function CreateStudent () {
                     setErrors(error.response.data.errors);
                 } else {
                     setError(error.response.data.message);
-                    setShowModal(true);
+                    setShowModalError(true);
+                    setErrorStatus(error.response.status);
                 }
             }
         }
+    }
+
+    useEffect(() => {
+        axios.get(`${baseUrl}/getUser`, { headers: {"x-access-token" : token} })
+            .then(response => {
+                setName(response.data.name);
+                setEmail(response.data.email);
+            })
+            .catch(function (error) {
+                setError(error.response.data.message);
+                setShowModalError(true);
+                setErrorStatus(error.response.status);
+            });
+
+    }, [token, userId]);
+
+    if(!name || !email) {
+        return (
+            <div>
+                <Loading />
+                <ModalError show={showModalError} onHide={() => modalAction()} message={error} onClick={() => modalAction()}/>
+            </div>
+        );
     }
 
     return (
@@ -69,15 +103,15 @@ function CreateStudent () {
 
             <Container className="body">
                 <Row className="text-center">
-                    <h1>Cadastrar</h1>
+                    <h1>Editar</h1>
                 </Row>
 
                 <Row>
-                    <Form noValidate validated={validated} method="POST" onSubmit={createStudent}>
+                    <Form noValidate validated={validated} method="POST" onSubmit={updateStudent}>
 
                         <Form.Group className="mb-3" controlId="name">
                             <Form.Label>Nome</Form.Label>
-                            <Form.Control required type="text" placeholder="Digite o seu nome" onChange={event => setName(event.target.value)} isInvalid={errors['name']}/>
+                            <Form.Control required type="text" defaultValue={name} placeholder="Digite o seu nome" onChange={event => setName(event.target.value)} isInvalid={errors['name']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -91,7 +125,7 @@ function CreateStudent () {
 
                         <Form.Group className="mb-3" controlId="email">
                             <Form.Label>Email</Form.Label>
-                            <Form.Control required type="email" placeholder="Digite o seu email" onChange={event => setEmail(event.target.value)} isInvalid={errors['email']}/>
+                            <Form.Control required type="email" defaultValue={email} placeholder="Digite o seu email" onChange={event => setEmail(event.target.value)} isInvalid={errors['email']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -105,7 +139,7 @@ function CreateStudent () {
 
                         <Form.Group className="mb-3" controlId="password">
                             <Form.Label>Senha</Form.Label>
-                            <Form.Control required type="password" placeholder="Digite a sua senha" onChange={event => setPassword(event.target.value)} isInvalid={errors['password']}/>
+                            <Form.Control type="password" placeholder="Digite a sua senha" onChange={event => setPassword(event.target.value)} isInvalid={errors['password']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -118,7 +152,7 @@ function CreateStudent () {
                         </Form.Group>
 
                         <div className="buttonDiv">
-                            <Button variant="primary" type="submit">Cadastrar</Button>
+                            <Button variant="primary" type="submit">Editar</Button>
                         </div>
 
                     </Form>
@@ -127,10 +161,10 @@ function CreateStudent () {
                 <BackButton />
             </Container>
 
-            <ModalError show={showModal} onHide={() => setShowModal(false)} message={error} onClick={() => setShowModal(false)}/>
-            <ModalSuccess show={showModalSuccess} onHide={() => history.push(`/login`)} message={successMessage} onClick={() => history.push(`/login`)}/>
+            <ModalError show={showModalError} onHide={() => modalAction()} message={error} onClick={() => modalAction()}/>
+            <ModalSuccess show={showModalSuccess} onHide={() => history.push(`/profile`)} message={successMessage} onClick={() => history.push(`/profile`)}/>
         </div>
     );
 }   
 
-export default CreateStudent;
+export default EditStudent;

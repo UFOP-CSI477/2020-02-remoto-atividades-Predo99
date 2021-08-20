@@ -11,9 +11,6 @@ export default function CustomNavbar(){
     const history = useHistory();
 
     async function logout() {
-        // cookies.set('x-access-token', "");
-        // cookies.set('userId', "");
-        // cookies.set('userType', "");
         localStorage.removeItem('x-access-token');
         localStorage.removeItem('userId');
         localStorage.removeItem('userType');
@@ -26,6 +23,12 @@ export default function CustomNavbar(){
             <Container fluid>  
                 <Navbar.Brand href="/">Home</Navbar.Brand>
                 <Nav className="justify-content-end">
+                    {
+                        token ?
+                            <Nav.Link  href="/profile">Perfil</Nav.Link>
+                        :
+                            ""
+                    }
                     {
                         token ?
                             <Nav.Link onClick={logout}>Logout</Nav.Link>

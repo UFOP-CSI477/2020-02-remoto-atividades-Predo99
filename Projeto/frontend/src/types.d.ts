@@ -13,6 +13,7 @@ interface IStudent {
 }
 
 interface IStudentSubject {
+    _id: string
     subject: string
     situation: string
     start: string

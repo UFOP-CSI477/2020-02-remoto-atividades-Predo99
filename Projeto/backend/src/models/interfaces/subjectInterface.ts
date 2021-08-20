@@ -1,5 +1,4 @@
-import { ObjectId, Types } from "mongoose";
-import IActivity from "./activityInterface";
+import { ObjectId } from "mongoose";
 
 interface ISubject{
     name: string,

@@ -16,8 +16,16 @@ function Home () {
 
     const history = useHistory();
 
+    async function logout() {
+        localStorage.removeItem('x-access-token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userType');
+        await axios.post(baseUrl + "/logout", {});
+    }
+
     function modalAction(){
         if(errorStatus === 401){
+            logout();
             return history.push('/');
         } else {
             return setShowModalError(false);
@@ -39,7 +47,7 @@ function Home () {
         if(userType === "student"){
 
             for (const studentSubject of studentSubjects) {
-                if(subject._id === studentSubject.subject){;
+                if(subject._id === studentSubject.subject){
                     return showSubjectStudent(subject);
                 }
             }
@@ -97,35 +105,51 @@ function Home () {
         }
     }
 
-    useEffect(() => {
-        async function loadSujects(){
-            axios.get(baseUrl + "/subjects").then(response => {
-                setSubjects(response.data);
-            });
-    
-            if(token && userId){
-                if(userType === "student"){
-                    axios.get(`${baseUrl}/student/${userId}`, { headers: {"x-access-token" : token} }).then(response => {
-                        setStudentSubjects(response.data.subjects);
-                    }).catch(function (error) {
-                        setError(error.response.data.message);
-                        setShowModalError(true);
-                        setErrorStatus(error.response.status);
-                    }); 
-                } else {
-                    axios.get(`${baseUrl}/teacherSubject`, { headers: {"x-access-token" : token} }).then(response => {
-                        setTeacherSubject(response.data);
-                    }).catch(function (error) {
-                        setError(error.response.data.message);
-                        setShowModalError(true);
-                        setErrorStatus(error.response.status);
-                    }); 
-                }            
+    function showSituation(subject_id: any){
+        if(userType === "student"){
+            for (const studentSubject of studentSubjects) {
+                if(subject_id === studentSubject.subject){
+                    return (
+                        <Card.Text className={studentSubject.situation}><strong>Situação: </strong>{studentSubject.situation}</Card.Text>
+                    );
+                }
             }
+        } else {
+            return (
+                ""
+            );
         }
+    }
 
+    async function loadSujects(){
+        await axios.get(baseUrl + "/subjects").then(response => {
+            setSubjects(response.data);
+        });
+
+        if(token && userId){
+            if(userType === "student"){
+                await axios.get(`${baseUrl}/student/${userId}`, { headers: {"x-access-token" : token} }).then(response => {
+                    setStudentSubjects(response.data.subjects);
+                }).catch(function (error) {
+                    setError(error.response.data.message);
+                    setShowModalError(true);
+                    setErrorStatus(error.response.status);
+                }); 
+            } else {
+                await axios.get(`${baseUrl}/teacherSubject`, { headers: {"x-access-token" : token} }).then(response => {
+                    setTeacherSubject(response.data);
+                }).catch(function (error) {
+                    setError(error.response.data.message);
+                    setShowModalError(true);
+                    setErrorStatus(error.response.status);
+                }); 
+            }            
+        }
+    }
+
+    useEffect(() => {
         loadSujects();
-    }, [token, userId, userType]);
+    },);
 
     return (
         <div>
@@ -146,6 +170,9 @@ function Home () {
                                 <Card.Text><strong>Professor: </strong>{subject.teacher.user.name}</Card.Text>
                                 <Card.Text><strong>Email de contato: </strong>{subject.teacher.user.email}</Card.Text>
                                 <Card.Text><strong>Descrição do professor: </strong>{subject.teacher.description}</Card.Text>
+
+                                {showSituation(subject._id)}
+
                                 <Card.Text className="text-end"><strong>Estudantes matriculados: </strong>{subject.students}</Card.Text>
                             </Card.Body>
 

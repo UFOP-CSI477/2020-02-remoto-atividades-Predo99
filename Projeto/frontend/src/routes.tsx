@@ -19,6 +19,9 @@ import ShowAnsweredActivity from './pages/activity/showAnsweredActivity';
 import EditClass from './pages/subject/editClass';
 import EditSlide from './pages/subject/editSlide';
 import EditActivity from './pages/activity/editActivity';
+import Profile from './pages/user/profile';
+import EditStudent from './pages/user/editStudent';
+import EditTeacher from './pages/user/editTeacher';
 
 function Routes () {
     return (
@@ -26,8 +29,11 @@ function Routes () {
             <Switch>
                 <Route path="/" exact component={Home}/>
                 <Route path="/login" exact component={Login}/>
+                <Route path="/profile" exact component={Profile}/>
                 <Route path="/createStudent" exact component={CreateStudent}/>
+                <Route path="/editStudent/:id" exact component={EditStudent}/>
                 <Route path="/createTeacher" exact component={CreateTeacher}/>
+                <Route path="/editTeacher/:id" exact component={EditTeacher}/>
                 <Route path="/subjectStudent/:id" exact component={SubjectStudent}/>
                 <Route path="/subjectTeacher/:id" exact component={SubjectTeacher}/>
                 <Route path="/addClass/:id" exact component={AddClass}/>

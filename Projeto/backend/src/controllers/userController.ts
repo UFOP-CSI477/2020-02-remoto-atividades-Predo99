@@ -20,18 +20,15 @@ const addUser = async (req: Request, res: Response): Promise<any> => {
     
         const newUser = await user.save();
         return newUser;
-
-        // res.status(201).send(newUser);
     } catch (error) {
         throw error
     }
 }
 
-
 const getUser = async (req: Request, res: Response): Promise<any> => {
-    const id = req.params.id;
+    const user_id = req.userId;
     try {
-        const user = await User.findById(id).orFail();
+        const user = await User.findById(user_id).orFail();
 
         res.status(200).json(user);
     } catch(error) {
@@ -39,4 +36,27 @@ const getUser = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
-export { getUsers, addUser, getUser };
+const updateUser = async (req: Request, res: Response): Promise<any> => {
+    const user_id = req.userId;
+    try {
+        const body = req.body;
+
+        const user = await User.findByIdAndUpdate(user_id, {
+            name: body.name,
+            email: body.email
+        }).orFail();
+
+        if(body.password != ""){
+            await User.findByIdAndUpdate(user_id, {
+                password: body.password,
+            }).orFail();
+        } 
+
+        return user;
+
+    } catch (error) {
+        throw error
+    }
+}
+
+export { getUsers, addUser, getUser, updateUser };

@@ -1,4 +1,4 @@
-import { ObjectId, Types } from "mongoose";
+import { ObjectId } from "mongoose";
 
 interface ITeacher{
     user: ObjectId,

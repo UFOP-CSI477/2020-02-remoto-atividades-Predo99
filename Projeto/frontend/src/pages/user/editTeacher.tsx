@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from "axios"
 import { useHistory } from "react-router-dom";
 import CustomNavbar from '../../components/Navbar';
@@ -6,13 +6,17 @@ import { Button, Container, Form, Row } from 'react-bootstrap';
 import BackButton from '../../components/BackButton';
 import ModalError from '../../components/ModalError';
 import ModalSuccess from '../../components/ModalSucess';
+import Loading from '../../components/Loading';
 
-function CreateTeacher () {
+function EditTeacher () {
 
     const baseUrl: string = "http://localhost:3000";
     const history = useHistory();
-
-    const [showModal, setShowModal] = useState(false);
+    const token = localStorage.getItem('x-access-token');
+    const userId = localStorage.getItem('userId');
+    
+    const [showModalError, setShowModalError] = useState(false);
+    const [errorStatus, setErrorStatus] = useState(Number);
     const [error, setError] = useState('');
     const [errors, setErrors] = useState<any>([]);
 
@@ -25,12 +29,19 @@ function CreateTeacher () {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [description, setDescription] = useState('');
-    const userType = "teacher";
 
     const [subjectName, setSubjectName] = useState('');
     const [subjectDescription, setSubjectDescription] = useState('');
 
-    async function createTeacher(event: any) {
+    function modalAction(){
+        if(errorStatus === 401){
+            return history.push('/');
+        } else {
+            return setShowModalError(false);
+        }
+    }
+
+    async function updateTeacher(event: any) {
         event.preventDefault();
 
         const form = event.currentTarget;
@@ -47,7 +58,6 @@ function CreateTeacher () {
             data.append('name', name);
             data.append('email', email);
             data.append('password', password);
-            data.append('userType', userType);
             data.append('description', description);
             data.append('subjectName', subjectName);
             data.append('subjectDescription', subjectDescription);
@@ -56,7 +66,7 @@ function CreateTeacher () {
             formData = JSON.parse(formData);
 
             try {
-                const response = await axios.post(baseUrl + "/addTeacher", formData);
+                const response = await axios.patch(`${baseUrl}/teacher/${userId}`, formData, { headers: {"x-access-token" : token} });
                 setSuccessMessage(response.data.message);
                 setShowModalSuccess(true);
             } catch(error){
@@ -64,10 +74,55 @@ function CreateTeacher () {
                     setErrors(error.response.data.errors);
                 } else {
                     setError(error.response.data.message);
-                    setShowModal(true);
+                    setShowModalError(true);
+                    setErrorStatus(error.response.status);
                 }
             }
         }
+    }
+
+    useEffect(() => {
+        axios.get(`${baseUrl}/getUser`, { headers: {"x-access-token" : token} })
+            .then(response => {
+                setName(response.data.name);
+                setEmail(response.data.email);
+            })
+            .catch(function (error) {
+                setError(error.response.data.message);
+                setShowModalError(true);
+                setErrorStatus(error.response.status);
+            });
+
+        axios.get(`${baseUrl}/teacher/${userId}`, { headers: {"x-access-token" : token} })
+            .then(response => {
+                setDescription(response.data.description);
+            })
+            .catch(function (error) {
+                setError(error.response.data.message);
+                setShowModalError(true);
+                setErrorStatus(error.response.status);
+            });
+
+        axios.get(`${baseUrl}/teacherSubject`, { headers: {"x-access-token" : token} })
+            .then(response => {
+                setSubjectName(response.data.subjectName);
+                setSubjectDescription(response.data.subjectDescription);
+            })
+            .catch(function (error) {
+                setError(error.response.data.message);
+                setShowModalError(true);
+                setErrorStatus(error.response.status);
+            });
+
+    }, [token, userId]);
+
+    if(!name || !email) {
+        return (
+            <div>
+                <Loading />
+                <ModalError show={showModalError} onHide={() => modalAction()} message={error} onClick={() => modalAction()}/>
+            </div>
+        );
     }
 
     return (
@@ -80,11 +135,11 @@ function CreateTeacher () {
                 </Row>
 
                 <Row>
-                    <Form noValidate validated={validated} method="POST" onSubmit={createTeacher}>
+                    <Form noValidate validated={validated} method="POST" onSubmit={updateTeacher}>
 
                         <Form.Group className="mb-3" controlId="name">
                             <Form.Label>Nome</Form.Label>
-                            <Form.Control required type="text" placeholder="Digite o seu nome" onChange={event => setName(event.target.value)} isInvalid={errors['name']}/>
+                            <Form.Control required type="text" defaultValue={name} placeholder="Digite o seu nome" onChange={event => setName(event.target.value)} isInvalid={errors['name']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -98,7 +153,7 @@ function CreateTeacher () {
 
                         <Form.Group className="mb-3" controlId="email">
                             <Form.Label>Email</Form.Label>
-                            <Form.Control required type="email" placeholder="Digite o email cadastrado" onChange={event => setEmail(event.target.value)} isInvalid={errors['email']}/>
+                            <Form.Control required type="email" defaultValue={email} placeholder="Digite o email cadastrado" onChange={event => setEmail(event.target.value)} isInvalid={errors['email']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -112,7 +167,7 @@ function CreateTeacher () {
 
                         <Form.Group className="mb-3" controlId="password">
                             <Form.Label>Senha</Form.Label>
-                            <Form.Control required type="password" placeholder="Digite a senha cadastrada" onChange={event => setPassword(event.target.value)} isInvalid={errors['password']}/>
+                            <Form.Control type="password" placeholder="Digite a senha cadastrada" onChange={event => setPassword(event.target.value)} isInvalid={errors['password']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -126,7 +181,7 @@ function CreateTeacher () {
 
                         <Form.Group className="mb-3" controlId="description">
                             <Form.Label>Descrição</Form.Label>
-                            <Form.Control required as="textarea" rows={3} placeholder="Digite uma descrição sobre sua formação" onChange={event => setDescription(event.target.value)} isInvalid={errors['description']}/>
+                            <Form.Control required as="textarea" defaultValue={description} rows={3} placeholder="Digite uma descrição sobre sua formação" onChange={event => setDescription(event.target.value)} isInvalid={errors['description']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -140,7 +195,7 @@ function CreateTeacher () {
 
                         <Form.Group className="mb-3" controlId="subject_name">
                             <Form.Label>Nome da disciplina</Form.Label>
-                            <Form.Control required type="text" placeholder="Digite o nome da disciplina" onChange={event => setSubjectName(event.target.value)} isInvalid={errors['subjectName']}/>
+                            <Form.Control required type="text" defaultValue={subjectName} placeholder="Digite o nome da disciplina" onChange={event => setSubjectName(event.target.value)} isInvalid={errors['subjectName']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -154,7 +209,7 @@ function CreateTeacher () {
 
                         <Form.Group className="mb-3" controlId="subject_description">
                             <Form.Label>Descrição da disciplina</Form.Label>
-                            <Form.Control required as="textarea" rows={3} placeholder="Digite uma descrição sobre a disciplina" onChange={event => setSubjectDescription(event.target.value)} isInvalid={errors['subjectDescription']}/>
+                            <Form.Control required as="textarea" defaultValue={subjectDescription} rows={3} placeholder="Digite uma descrição sobre a disciplina" onChange={event => setSubjectDescription(event.target.value)} isInvalid={errors['subjectDescription']}/>
 
                             <Form.Control.Feedback type="invalid">
                                 {
@@ -167,7 +222,7 @@ function CreateTeacher () {
                         </Form.Group>
 
                         <div className="buttonDiv">
-                            <Button variant="primary" type="submit">Cadastrar</Button>
+                            <Button variant="primary" type="submit">Editar</Button>
                         </div>
 
                     </Form>
@@ -176,10 +231,10 @@ function CreateTeacher () {
                 <BackButton />
             </Container>
 
-            <ModalError show={showModal} onHide={() => setShowModal(false)} message={error} onClick={() => setShowModal(false)}/>
-            <ModalSuccess show={showModalSuccess} onHide={() => history.push(`/login`)} message={successMessage} onClick={() => history.push(`/login`)}/>
+            <ModalError show={showModalError} onHide={() => modalAction()} message={error} onClick={() => modalAction()}/>
+            <ModalSuccess show={showModalSuccess} onHide={() => history.push(`/profile`)} message={successMessage} onClick={() => history.push(`/profile`)}/>
         </div>
     );
 }   
 
-export default CreateTeacher;
+export default EditTeacher;

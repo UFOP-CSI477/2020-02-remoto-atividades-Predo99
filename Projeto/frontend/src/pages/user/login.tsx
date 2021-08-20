@@ -50,16 +50,6 @@ function Login () {
                     localStorage.setItem('x-access-token', token);
                     localStorage.setItem('userId', userId);
                     localStorage.setItem('userType', userType);
-                    // const cookies = new Cookies();
-                    // cookies.set('x-access-token', token, {
-                    //     maxAge: 3000
-                    // });
-                    // cookies.set('userId', userId, {
-                    //     maxAge: 3000
-                    // });
-                    // cookies.set('userType', userType, {
-                    //     maxAge: 3000
-                    // });
                     history.push('/');
                 }
             } catch(error){

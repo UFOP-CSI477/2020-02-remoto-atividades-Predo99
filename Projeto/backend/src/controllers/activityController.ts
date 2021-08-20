@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
 import Activity from "../models/Activity";
 import Answer from "../models/Answer";
-import Student from "../models/Student";
 
 import Subject from "../models/Subject";
 import { checkSituation } from "./subjectController";
@@ -457,25 +456,7 @@ const editActivity = async (req: Request, res: Response): Promise<any> => {
                 }
                 index++;
             }
-
-            // for (let index = 0; index < answer.questions.length; index++) {
-            //     const question = answer.questions[index];
-
-            //     if(question.optionID == activity.questions[index].answer){
-            //         console.log("acerto: " + question.optionID, activity.questions[index].answer)
-            //         await Answer.findOneAndUpdate({_id: answer._id, questions: {$elemMatch: {question: question.question}}}, {$set: {
-            //             "questions.$.grade": activity.questions[index].value
-            //         }});
-            //         total += activity.questions[index].value;
-            //     } else {
-            //         console.log("erro: " + question.optionID, activity.questions[index].answer)
-            //         await Answer.findOneAndUpdate({_id: answer._id, questions: {$elemMatch: {question: question.question}}}, {$set: {
-            //             "questions.$.grade": 0
-            //         }});
-            //     }
-            //     console.log("total: " + total)
-            // }
-            const t = await Answer.findByIdAndUpdate(answer._id, {totalGrade: total}).orFail();
+            await Answer.findByIdAndUpdate(answer._id, {totalGrade: total}).orFail();
         }
 
         res.status(201).json({"message": "Atividade editada com sucesso!"});

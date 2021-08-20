@@ -2,8 +2,8 @@ import { Response, Request } from "express";
 import Subject from "../models/Subject";
 import Teacher from "../models/Teacher";
 import User from "../models/User";
-import { addSubject } from "./subjectController";
-import { addUser } from "./userController";
+import { addSubject, updateSubject } from "./subjectController";
+import { addUser, updateUser } from "./userController";
 
 declare module 'express' {
     interface Request {
@@ -12,19 +12,7 @@ declare module 'express' {
 }
 
 const getTeachers = async (req: Request, res: Response): Promise<void> => {
-    // const user = await User.findById(req.userId).exec();
-    //console.log(req.userId);
-    //console.log(req.headers)
-
     const teachers = await Teacher.find().populate("user");
-
-    // for (const teacher of teachers) {
-    //     if (teacher.user instanceof User) {
-    //         console.log(teacher.user.name);
-    //     } else {
-    //         console.log(teacher.user);
-    //     }
-    // }
 
     res.status(200).json({ teachers });
 };
@@ -49,6 +37,23 @@ const addTeacher = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+const updateTeacher = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const user = await updateUser(req, res);
+
+        const teacher = await Teacher.findOneAndUpdate({user: user._id}, {
+            description: req.body.description
+        }).orFail();
+
+        await updateSubject(req, res, teacher._id);
+
+        res.status(201).json({"message": "Professor atualizado com sucesso!"});
+
+    } catch (error) {
+        res.status(400).json(error);
+    }
+};
+
 const showTeacher = async (req: Request, res: Response): Promise<any> => {
     const id = req.params.id;
     try {
@@ -72,4 +77,4 @@ const showTeacherSubject = async (req: Request, res: Response): Promise<any> => 
     }
 };
 
-export { getTeachers, addTeacher, showTeacher, showTeacherSubject };
+export { getTeachers, addTeacher, showTeacher, showTeacherSubject, updateTeacher };

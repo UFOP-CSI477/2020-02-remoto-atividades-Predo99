@@ -4,12 +4,13 @@ import multer from 'multer';
 import uploadConfig from './config/upload';
 
 import { getUsers, addUser, getUser } from "./controllers/userController";
-import { getStudents, addStudent, showStudent, enrollToSubject } from "./controllers/studentController";
-import { addTeacher, getTeachers, showTeacher, showTeacherSubject } from "./controllers/teacherController";
+import { getStudents, addStudent, showStudent, enrollToSubject, updateStudent } from "./controllers/studentController";
+import { addTeacher, getTeachers, showTeacher, showTeacherSubject, updateTeacher } from "./controllers/teacherController";
 import { login, logout, verifyJWT } from "./controllers/loginController";
 import { addClass, addSlide, addSubject, editClass, editSlide, getSubjects, removeClass, removeSlide, returnSlide, showClass, showSlide, showSubject } from "./controllers/subjectController";
 import { addActivity, addAnswer, editActivity, removeActivity, showActivity, showAnswer, showAnswers } from "./controllers/activityController";
 
+// https://stackoverflow.com/questions/54545581/how-can-i-return-multer-error-to-client-while-using-express-validator
 function multerUploadMiddleware(multerUploadFunction) {
     return (req, res, next) =>
         multerUploadFunction(req, res, err => {
@@ -37,7 +38,7 @@ const multerMiddleware = multerUploadMiddleware(upload.single('slide'));
 
 router.get("/users", getUsers);
 router.post("/addUser", addUser);
-router.get("/user/:id", verifyJWT, getUser);
+router.get("/getUser", verifyJWT, getUser);
 
 router.post("/login", login);
 router.post("/logout", logout);
@@ -45,11 +46,13 @@ router.post("/logout", logout);
 router.get("/students", verifyJWT, getStudents);
 router.post("/addStudent", addStudent);
 router.get("/student/:id", verifyJWT, showStudent);
+router.patch("/student/:id", verifyJWT, updateStudent);
 router.get("/enroll/:id", verifyJWT, enrollToSubject);
 
 router.get("/teachers", verifyJWT, getTeachers);
 router.post("/addTeacher", addTeacher);
 router.get("/teacher/:id", verifyJWT, showTeacher);
+router.patch("/teacher/:id", verifyJWT, updateTeacher);
 router.get("/teacherSubject", verifyJWT, showTeacherSubject);
 
 router.get("/subjects", getSubjects);

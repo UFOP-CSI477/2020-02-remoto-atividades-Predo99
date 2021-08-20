@@ -25,7 +25,6 @@ const addSubject = async (req: Request, res: Response, teacherId: any): Promise<
 
         const teacher = await Teacher.findById(teacherId).orFail();
 
-
         const subject = new Subject({
             subjectName: body.subjectName,
             subjectDescription: body.subjectDescription,
@@ -37,6 +36,25 @@ const addSubject = async (req: Request, res: Response, teacherId: any): Promise<
     
         const newSubject = await subject.save();
         return newSubject;
+
+    } catch (error) {
+        throw error
+    }
+}
+
+const updateSubject = async (req: Request, res: Response, teacherId: any): Promise<any> => {
+    try {
+
+        const body = req.body;
+
+        const teacher = await Teacher.findById(teacherId).orFail();
+
+        const subject = await Subject.findOneAndUpdate({teacher: teacher._id}, {
+            subjectName: body.subjectName,
+            subjectDescription: body.subjectDescription,
+        });
+
+        return subject;
 
     } catch (error) {
         throw error
@@ -102,7 +120,6 @@ const removeClass = async (req: Request, res: Response): Promise<any> => {
 }
 
 const showClass = async (req: Request, res: Response): Promise<any> => {
-    const id = req.params.id;
     const classId = req.params.class;
     try {
 
@@ -183,11 +200,6 @@ const returnSlide = async (req: Request, res: Response): Promise<any> => {
         const filepath = path.join(__dirname, '..', '..', 'uploads/', req.params.path);
         res.download(filepath);
 
-        // fs.readFile(filepath, function (err,data){
-        //     res.contentType("application/pdf");
-        //     res.send(data);
-        // });
-
     } catch(error) {
         res.status(400).json(error);
     }
@@ -235,11 +247,7 @@ const editSlide = async (req: Request, res: Response): Promise<any> => {
 
 async function checkSituation(user_id: any, subject_id: any){
 
-    const student = await Student.findOne({user: user_id}).orFail();
     const subject = await Subject.findById(subject_id).orFail().populate("activities", "totalValue");
-
-    // const answers = await Answer.find({user: user_id, subject: subject_id}).sort('-totalGrade').distinct("activity");
-    //const answers = await Answer.find({user: user_id, subject: subject_id}).sort('-totalGrade');
 
     const answers = await Answer.aggregate([
         { $match: {
@@ -291,4 +299,4 @@ async function checkSituation(user_id: any, subject_id: any){
 }
 
 
-export { getSubjects, addSubject, showSubject, addClass, removeClass, showClass, editClass, addSlide, removeSlide, returnSlide, showSlide, editSlide, checkSituation };
+export { getSubjects, addSubject, showSubject, addClass, removeClass, showClass, editClass, addSlide, removeSlide, returnSlide, showSlide, editSlide, checkSituation, updateSubject };
