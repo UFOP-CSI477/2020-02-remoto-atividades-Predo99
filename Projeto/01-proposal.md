@@ -29,5 +29,5 @@
   Neste trabalho não serão considerados prazos de entrega, geração de certificados de conclusão e comunicação entre os usuários (fóruns ou chat, por exemplo).
   
 ### 4. Referências
-  Moodle. **Moodle**, 2021. Disponível em: https://www.moodlepresencial.ufop.br. Acesso em 14 jun. 2021.
-  Udemy, Inc. **Udemy**, 2021. Disponível em: https://www.udemy.com/pt/. Acesso em 14 jun. 2021.
+  * Moodle. **Moodle**, 2021. Disponível em: https://www.moodlepresencial.ufop.br. Acesso em 14 jun. 2021.
+  * Udemy, Inc. **Udemy**, 2021. Disponível em: https://www.udemy.com/pt/. Acesso em 14 jun. 2021.
