@@ -14,15 +14,15 @@
 ### 2. Escopo
 
   Este projeto terá as seguintes funcionalidades:
-    * Cadastrar e atualizar Professores
-      * Cadastrar e atualizar disciplinas
-      * CRUD de aulas
-      * CRUD de arquivos
-      * CRUD de atividades
-    * Cadastrar e atualizar Alunos
-      * Realizar matrícula em disciplinas
-      * Visualizar de aulas e arquivos
-      * Visualizar e responder atividades
+  * Cadastrar e atualizar Professores
+    * Cadastrar e atualizar disciplinas
+    * CRUD de aulas
+    * CRUD de arquivos
+    * CRUD de atividades
+  * Cadastrar e atualizar Alunos
+    * Realizar matrícula em disciplinas
+    * Visualizar de aulas e arquivos
+    * Visualizar e responder atividades
 
 ### 3. Restrições
 
