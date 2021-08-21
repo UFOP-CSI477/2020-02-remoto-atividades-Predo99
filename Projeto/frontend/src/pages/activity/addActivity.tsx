@@ -275,8 +275,8 @@ function AddActivity () {
         return (
             <div key={`questions.${index}.options.${j}.value`}>
                 <Form.Group className="mb-3" controlId={`questions.${index}.options.${j}.value`}>
-                    <Form.Label>Descrição da opção {j}</Form.Label>
-                    <Form.Control required type="text" placeholder={`Digite a opção ${j}`} onChange={event => handleQuestionOptions(index, j, event.target.value)} isInvalid={errors[`questions.${index}.options.${j}.value`]}/>
+                    <Form.Label>Descrição da opção {j+1}</Form.Label>
+                    <Form.Control required type="text" placeholder={`Digite a opção ${j+1}`} onChange={event => handleQuestionOptions(index, j, event.target.value)} isInvalid={errors[`questions.${index}.options.${j}.value`]}/>
 
                     <Form.Control.Feedback type="invalid">
                         {

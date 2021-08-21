@@ -121,35 +121,35 @@ function Home () {
         }
     }
 
-    async function loadSujects(){
-        await axios.get(baseUrl + "/subjects").then(response => {
-            setSubjects(response.data);
-        });
-
-        if(token && userId){
-            if(userType === "student"){
-                await axios.get(`${baseUrl}/student/${userId}`, { headers: {"x-access-token" : token} }).then(response => {
-                    setStudentSubjects(response.data.subjects);
-                }).catch(function (error) {
-                    setError(error.response.data.message);
-                    setShowModalError(true);
-                    setErrorStatus(error.response.status);
-                }); 
-            } else {
-                await axios.get(`${baseUrl}/teacherSubject`, { headers: {"x-access-token" : token} }).then(response => {
-                    setTeacherSubject(response.data);
-                }).catch(function (error) {
-                    setError(error.response.data.message);
-                    setShowModalError(true);
-                    setErrorStatus(error.response.status);
-                }); 
-            }            
-        }
-    }
-
     useEffect(() => {
+        async function loadSujects(){
+            await axios.get(baseUrl + "/subjects").then(response => {
+                setSubjects(response.data);
+            });
+    
+            if(token && userId){
+                if(userType === "student"){
+                    await axios.get(`${baseUrl}/student/${userId}`, { headers: {"x-access-token" : token} }).then(response => {
+                        setStudentSubjects(response.data.subjects);
+                    }).catch(function (error) {
+                        setError(error.response.data.message);
+                        setShowModalError(true);
+                        setErrorStatus(error.response.status);
+                    }); 
+                } else {
+                    await axios.get(`${baseUrl}/teacherSubject`, { headers: {"x-access-token" : token} }).then(response => {
+                        setTeacherSubject(response.data);
+                    }).catch(function (error) {
+                        setError(error.response.data.message);
+                        setShowModalError(true);
+                        setErrorStatus(error.response.status);
+                    }); 
+                }            
+            }
+        }
+
         loadSujects();
-    },);
+    }, [token, userId, userType]);
 
     return (
         <div>
